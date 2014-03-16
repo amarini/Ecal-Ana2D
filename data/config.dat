@@ -1,0 +1,5 @@
+name=d0311306 ch1=3 ch2=6 xaxis=100,1000 yaxis=100,1000 xrebin=64 yrebin=64 pedrange1=100,130 pedrange2=30,50  density=1
+name=d0490923 ch1=3 ch2=6 xaxis=200,800 yaxis=400,800 xrebin=32 yrebin=32 pedrange1=90,130 pedrange2=0,50 zaxis=0,20
+name=d0651409 ch1=3 ch2=6 xaxis=0,100 yaxis=100,500 xrebin=8 yrebin=8 pedrange1=90,110 pedrange2=30,50  density=1
+name=d1491020 ch1=2 ch2=6 xaxis=60,600 yaxis=200,600 xrebin=16 yrebin=16 pedrange1=0,130 pedrange2=30,50 xtitle=LYSO-WLS
+name=d3081419 ch1=3 ch2=6 xaxis=5,50 yaxis=200,600 xrebin=4 yrebin=16 pedrange1=100,130 pedrange2=30,50  density=1
