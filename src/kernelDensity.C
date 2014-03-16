@@ -71,6 +71,7 @@ TH2* kernelDensity(TH2* hData_rebin,float minInRadius,pair<float,float> xaxis, p
 	   	       	       		current += hData_rebin->GetBinContent(xbin,ybin) * TMath::Exp( - (dx*dx+dy*dy)/(radius*radius) );
 			}//end ybin
 		 }//end xbin
+		 //current /= 2 *TMath::Pi() ; // integral of gaus
 
 	         current /= (radius * radius);
 		 current *= rStep*rStep; //restore #bins

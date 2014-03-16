@@ -98,7 +98,7 @@ def PedFit(t,c,ch,f1min,f1max):
 
 def Plot( conf ):
 	fROOT=ROOT.TFile.Open(conf["name"]+".root")
-	if fROOT=None:
+	if fROOT==None:
 		ROOT.gSystem.Load("Get_rootfile_C.so")
 		ROOT.Get_rootfile(conf["name"])
 		fROOT=ROOT.TFile.Open(conf["name"]+".root")
