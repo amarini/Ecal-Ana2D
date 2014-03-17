@@ -171,7 +171,13 @@ def Plot( conf ):
 	ROOT.gSystem.Load("fancyPalette_C.so")
 	ROOT.DarkBodyRadiator();
 	#ROOT.ChangePalette();
-	hData_rebin.Draw("CONT4 Z");
+	for xBin in range(1,hData_rebin.GetNbinsX() + 1): 
+	  for yBin in range(1,hData_rebin.GetNbinsY() + 1): 
+		  if hData_rebin.GetBinContent(xBin,yBin) <= 0 :
+			  hData_rebin.SetBinContent(xBin,yBin,0.001)
+			  hData_rebin.SetBinError(xBin,yBin,1)
+
+	hData_rebin.Draw("COL Z");
 	ToSave[conf["name"]+"_c5"]=c5
 
 	#Draw Projection
