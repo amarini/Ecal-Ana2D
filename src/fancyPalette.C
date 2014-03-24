@@ -48,6 +48,26 @@ void ChangePalette(){
    gStyle->SetNumberContours(99);
 }
 
+void MonoCromatic()
+{
+   gStyle->SetOptStat(0);
+   gStyle->SetOptTitle(0);
+	rgb black(kBlack);
+	rgb darkBlue(kBlue+2);
+	rgb blue(kBlue-3);
+	rgb lightBlue(kBlue-4);
+	rgb white(kWhite);
+   	//gROOT->GetColor(kBlack)->GetRGB(r,g,b)
+   Double_t r[]    = {white.r, lightBlue.r, blue.r,    darkBlue.r,  black.r };
+   Double_t g[]    = {white.g, lightBlue.g, blue.g,    darkBlue.g,  black.g };
+   Double_t b[]    = {white.b, lightBlue.b, blue.b,    darkBlue.b,  black.b };
+   Double_t stop[] = {0.,      0.40,       .50,       .80,          1.0};
+   for(int i=0;i<5;i++)
+	   cout<< "RGB will be setted to "<<r[i]<<":"<<g[i]<<":"<<b[i]<<endl;
+   Int_t FI = TColor::CreateGradientColorTable(5, stop, r, g, b, 20);
+
+}
+
 void DarkBodyRadiator(){
 // set Dark Body Radiator palette
    gStyle->SetOptStat(0);
@@ -58,7 +78,7 @@ void DarkBodyRadiator(){
       Double_t red[nRGBs]   = { 0.00, 0.50, 1.00, 1.00, 1.00};
       Double_t green[nRGBs] = { 0.00, 0.00, 0.55, 1.00, 1.00};
       Double_t blue[nRGBs]  = { 0.00, 0.00, 0.00, 0.00, 1.00};
-      TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, 255);
+      TColor::CreateGradientColorTable(nRGBs, stops, red, green, blue, 20);
       int paletteType = 5;
       gStyle->SetNumberContours(99);
       //gStyle->SetAxisColor(kGray+3,"XY");
