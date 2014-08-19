@@ -1,0 +1,21 @@
+#name=d0311306 ch1=3 ch2=6 xaxis=100,1000 yaxis=100,1000 xrebin=64 yrebin=64 pedrange1=100,130 pedrange2=30,50  density=1
+#name=d0490923 ch1=3 ch2=6 xaxis=200,800 yaxis=300,800 xrebin=32 yrebin=32 pedrange1=90,130 pedrange2=0,50
+#name=d0651409 ch1=3 ch2=6 xaxis=0,100 yaxis=300,500 xrebin=8 yrebin=8 pedrange1=90,110 pedrange2=30,50  density=1
+#name=d1491020 ch1=2 ch2=6 xaxis=60,200 yaxis=200,600 xrebin=16 yrebin=16 pedrange1=0,130 pedrange2=30,50 xtitle=LYSO-WLS
+#name=d3081419 ch1=3 ch2=6 xaxis=5,50 yaxis=200,600 xrebin=4 yrebin=16 pedrange1=100,130 pedrange2=30,50  density=1
+
+# 855-2200 + 852-2000, 4x0.6mm PTP sputtered SiO2 fibers, large pedf on ch6, fiber fluorescence?, pg15, 7/3-21/3 2014
+name=d0800955 ch1=3 ch2=6 xaxis=100,1000 yaxis=300,550 xrebin=64 yrebin=16 pedrange1=90,120 pedrange2=30,50 xtitle=2xCeF_{3}-SiO_{2}
+
+# 855-2200+ 852-2000, as before but std duration, 4fibers, pg16, 21/3-25/3
+name=d0841115 ch1=3 ch2=6 xaxis=100,800 yaxis=300,550 xrebin=64 yrebin=16 pedrange1=110,130 pedrange2=30,50 xtitle=2xCeF_{3}-SiO_{2}
+# CeF3=855-2200 + 852-2000 (PTP SiO2) 4 fibers attenuate WLS to look for direct scintillation, pg17, 25/3-28/3 2014,
+name=d0871126 ch1=3 ch2=6 xaxis=16,200 yaxis=300,550 xrebin=16 yrebin=16 pedrange1=110,140 pedrange2=70,100 xtitle=2xCeF_{3}-Si0_{2}~attenuate
+
+# trigger D852-1600, D855-2200 cladded WLS, pg25, 16/6-24/6 2014
+name=d1752205 ch1=3 ch2=6 xaxis=100,800 yaxis=100,300 xrebin=32 yrebin=16 pedrange1=90,120 pedrange2=30,50 xtitle=CeF_{3}-cladded
+#trigger - , D855-2200+D852-2000 cladded WLS, pg26, 24/6-10/7 2014
+name=d1911608 ch1=3 ch2=6 xaxis=100,800 yaxis=100,300 xrebin=32 yrebin=16 pedrange1=120,140 pedrange2=30,50 xtitle=2xCeF_{3}-cladded
+### FLOOD
+#trigger - , D855-2200+D852-2000 cladded WLS, pg27 = pg26 ,16/7-22/7 2014
+name=d2031013 ch1=3 ch2=6 xaxis=100,800 yaxis=100,300 xrebin=32 yrebin=16 pedrange1=90,120 pedrange2=30,50 xtitle=2xCeF_{3}-cladded
