@@ -36,7 +36,7 @@ def ReadDat(inputfile):
 		strings=["name","xtitle","ytitle","merge"]
 		twofloats=["xaxis","yaxis","zaxis","pedrange1","pedrange2"]
 		oneint=["ch1","ch2","xrebin","yrebin","density","maxentries"]
-		onefloat=[]
+		onefloat=["statrescale"]
 		for word in parts:
 			if word.split("=")[0] in strings:
 				tmpDict[word.split("=")[0]]=word.split("=")[1].replace('~',' ')
@@ -63,6 +63,10 @@ def ReadDat(inputfile):
 		if not "pedrange1" in tmpDict: tmpDict["pedrange1"]=(0,50)
 		if not "pedrange2" in tmpDict: tmpDict["pedrange2"]=(0,50)
 		# no default density. If exists is used
+		if not "statrescale" in tmpDict: tmpDict["statrescale"]=1
+		if tmpDict["statrescale"] > 1 or tmpDict["statrescale"] <0:
+			print "Error: Rescale of Stat not in [0-1]. I will assume 1"
+			tmpDict["statrescale"]=1
 		if tmpDict["name"] != "xxx": R[tmpDict["name"]] =tmpDict
 	return R
 
@@ -215,6 +219,10 @@ def Plot( conf ):
 	pedTree.Add(conf["name"]+".root")
 	if "merge" in conf and conf["merge"] != None:
 		for f in conf["merge"].split(','):
+			print "Adding file",f+".root","to the pedestal for",conf["name"]
+			f2=ROOT.TFile.Open(f+".root")
+			if f2==None:External.Get_rootfile(f)
+			else: f2.Close()
 			pedTree.Add(f+".root")
 	c1.cd(1)
 	(h1,ped1)=PedFit(pedTree,c1, conf["ch1"] , conf["pedrange1"][0], conf["pedrange1"][1])
@@ -227,10 +235,16 @@ def Plot( conf ):
 	dataTree.Add(conf["name"]+".root")
 	if "merge" in conf and conf["merge"] != None:
 		for f in conf["merge"].split(','):
+			print "Adding file",f+".root","to the datatree for",conf["name"]
 			dataTree.Add(f+".root")
 	hDataName="ch%d:ch%d Ped. Sub."%(conf["ch1"],conf["ch2"])
 	hData=ROOT.TH2F(hDataName,hDataName,1024,0,1024,1024,0,1024)
 	maxentries=conf["maxentries"] if conf["maxentries"] >0 else 1000000000
+	if conf["maxentries"]<=0 and conf["statrescale"] <1 :
+		print "Using stat rescale: "
+		maxentries= int (dataTree.GetEntries() * conf["statrescale"] )
+	if conf["maxentries"] > 0 and conf["statrescale"]<1:
+		print "WARNING: Cannot declare both entries and stat rescale. Ignoring the stat recale."
 	dataTree.Draw("ch%d-%f:ch%d-%f>>%s"%(conf["ch1"],ped1,conf["ch2"],ped2,hDataName),"","",maxentries)
 	hData.GetYaxis().SetTitle(conf["ytitle"])
 	hData.GetXaxis().SetTitle(conf["xtitle"])
@@ -259,9 +273,20 @@ def Plot( conf ):
 
 	#draw cont plot
 	c5=ROOT.TCanvas("c5","c5",600,600)
-    	#ROOT.gStyle.SetPalette(53);
+	# Palette 53
+	#    if ncolors = 51 and colors=0, a Deep Sea palette is used.
+	#   if ncolors = 52 and colors=0, a Grey Scale palette is used.
+	#   if ncolors = 53 and colors=0, a Dark Body Radiator palette is used.
+	#   if ncolors = 54 and colors=0, a two-color hue palette palette is used.(dark blue through neutral gray to bright yellow)
+	#   if ncolors = 55 and colors=0, a Rain Bow palette is used.
+	#   if ncolors = 56 and colors=0, an inverted Dark Body Radiator palette is used.
+    	#ROOT.gStyle.SetPalette(56);
+
+
 	ROOT.gSystem.Load("fancyPalette_C.so")
-	ROOT.DarkBodyRadiator();
+	#ROOT.DarkBodyRadiator();
+	ROOT.MonoCromatic();
+
 	#ROOT.ChangePalette();
 	hData_clean=CleanHisto(hData_rebin)
 
@@ -293,6 +318,7 @@ def Plot( conf ):
 
 	if "density" in conf and conf["density"]:
 	   c8=ROOT.TCanvas("c8","c8",600,600)
+	   # this must be compiled, otherwise too slow
 	   ROOT.gSystem.Load("kernelDensity_C.so")
 	   xaxis=ROOT.std.pair(float,float)()
 	   yaxis=ROOT.std.pair(float,float)()

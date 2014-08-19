@@ -39,8 +39,8 @@ def Get_rootfile(filename):
 			continue;
 		parts=line.split()
 		for i in range(0,12):
-			ped.x[i]=float(parts[i])
-			event.x[i]=float(parts[i])
+			ped.x[i]=int(parts[i])
+			event.x[i]=int(parts[i])
 		if dataSection:
 			dataTree.Fill()
 		if pedSection:
