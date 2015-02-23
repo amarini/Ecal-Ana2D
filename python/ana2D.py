@@ -107,6 +107,43 @@ def PedFit(t,c,ch,f1min,f1max):
 	print "Pedestal for ch"+str(ch)+" is "+str(ped)
 	return (h,ped)
 
+def FitGaus(h):
+	f1min=h.GetBinLowEdge(1)
+	f1max=h.GetBinLowEdge(h.GetNbinsX()+1)
+	f1=ROOT.TF1("fit1","gaus",f1min,f1max)
+	f1.SetParameter(0,h.Integral())
+	f1.SetParameter(1,h.GetMean())
+	f1.SetParameter(2,h.GetRMS())
+
+	h.Fit("fit1","NQ")
+
+	mu=f1.GetParameter(1)
+	sigma=f1.GetParameter(2)
+
+	print "step1 '"+h.GetName()+"' mu=",mu,"sigma=",sigma,"norm=",f1.GetParameter(0)
+	print "step1 R==",f1min,f1max
+	f1min=max(mu-sigma,f1min)
+	f1max=min(mu+sigma,f1max)
+
+	if(mu<0):
+		maxH=0
+		iMax=0
+		for i in range(1,h.GetNbinsX()+1):
+			if maxH<h.GetBinContent(i): 
+				maxH=h.GetBinContent(i)
+				iMax=i
+		print "SWITCH TO MU<0 mode"
+		f1min=h.GetBinLowEdge(iMax-5)
+		f1max=h.GetBinLowEdge(iMax+4)
+	
+	
+	f1.SetRange(f1min,f1max)
+	h.Fit("fit1","RQ")
+	mu=f1.GetParameter(1)
+	sigma=f1.GetParameter(2)
+
+	return (mu,sigma)
+
 def DrawLines(conf):
 	low=0.
 	high=1000.
@@ -294,6 +331,11 @@ def Plot( conf ):
 	ToSave[conf["name"]+"_c5"]=c5
 
 	#Draw Projection
+	l=ROOT.TLatex()
+	l.SetNDC()
+	l.SetTextSize(0.03)
+	l.SetTextAlign(33)
+
 	c6=ROOT.TCanvas("c6","c6",600,600)
 	px=hData_rebin.ProjectionX();
 	px.SetTitle("Projection X (%.1f<=Y<=%.1f)"%( hData_rebin.GetXaxis().GetBinLowEdge( hData_rebin.GetXaxis().GetFirst() ) , 
@@ -303,6 +345,8 @@ def Plot( conf ):
 	px.SetFillStyle(3001)
 	px.SetLineWidth(2)
 	px.Draw("HIST")
+	(m,s)=FitGaus(px)
+	l.DrawLatex(.89,.89, "#splitline{#mu=%.1f}{#sigma=%.1f}"%(m,s)) 
 	ToSave[conf["name"]+"_c6"]=c6
 
 	c7=ROOT.TCanvas("c7","c7",600,600)
@@ -314,6 +358,8 @@ def Plot( conf ):
 	py.SetFillStyle(3001)
 	py.SetLineWidth(2)
 	py.Draw("HIST")
+	(m,s)=FitGaus(py)
+	l.DrawLatex(.89,.89, "#splitline{#mu=%.1f}{#sigma=%.1f}"%(m,s)) 
 	ToSave[conf["name"]+"_c7"]=c7
 
 	if "density" in conf and conf["density"]:
